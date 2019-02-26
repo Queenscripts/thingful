@@ -1,9 +1,20 @@
-# Blogful API Auth!
+# Thingful Server
+
+## Setting Up
+
+- Install dependencies: `npm install`
+- Create development database, test database, and database user.
+- `cp example.env .env`
+- Replace values in `.env` with your custom values.
+- Bootstrap database: `npm run migrate`
+
+## Sample Data
+
+- To seed the database for development: `psql -U my_user -d my_database -a -f seeds/seed.blogful_tables.sql`
+- To clear sample data: `psql -U my_user -d my_database -a -f seeds/trunc.blogful_tables.sql`
 
 ## Scripts
 
-Start the application `npm start`
-
-Start nodemon for the application `npm run dev`
-
-Run the tests in watch mode `npm test`
+- Start application for development: `npm run dev`
+- Start application for production: `npm start`
+- Run tests in watch mode: `npm test`

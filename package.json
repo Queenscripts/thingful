@@ -1,7 +1,8 @@
 {
-  "name": "blogful-api",
+  "name": "thingful-server",
   "version": "0.0.1",
-  "description": "",
+  "description": "Starter code for learning about authentication.",
+  "private": true,
   "main": "src/server.js",
   "scripts": {
     "test": "mocha --require test/setup.js",
@@ -11,9 +12,6 @@
     "predeploy": "npm audit",
     "deploy": "git push heroku master"
   },
-  "keywords": [],
-  "author": "Thomas `tomatao` Hudspith-Tatham <iammotivated@gmail.com>",
-  "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
@@ -30,5 +28,10 @@
     "nodemon": "^1.18.9",
     "postgrator-cli": "^3.1.0",
     "supertest": "^3.3.0"
-  }
+  },
+  "contributors": [
+    "Thomas `tomatao` Hudspith-Tatham <iammotivated@gmail.com>",
+    "Joshua Reade Harris <jharris@thinkful.com>"
+  ],
+  "license": "MIT"
 }
