@@ -3,18 +3,18 @@ const xss = require('xss')
 const ThingsService = {
   getAllThings(db) {
     return db
-      .from('thingful_things AS art')
+      .from('thingful_things AS thg')
       .select(
-        'art.id',
-        'art.title',
-        'art.date_created',
-        'art.content',
-        'art.image',
+        'thg.id',
+        'thg.title',
+        'thg.date_created',
+        'thg.content',
+        'thg.image',
         db.raw(
-          `count(DISTINCT comm) AS number_of_reviews`
+          `count(DISTINCT rev) AS number_of_reviews`
         ),
         db.raw(
-          `AVG(comm.rating) AS average_review_rating`
+          `AVG(rev.rating) AS average_review_rating`
         ),
         db.raw(
           `json_strip_nulls(
@@ -30,32 +30,32 @@ const ThingsService = {
         ),
       )
       .leftJoin(
-        'thingful_reviews AS comm',
-        'art.id',
-        'comm.thing_id',
+        'thingful_reviews AS rev',
+        'thg.id',
+        'rev.thing_id',
       )
       .leftJoin(
         'thingful_users AS usr',
-        'art.user_id',
+        'thg.user_id',
         'usr.id',
       )
-      .groupBy('art.id', 'usr.id')
+      .groupBy('thg.id', 'usr.id')
   },
 
   getById(db, id) {
     return ThingsService.getAllThings(db)
-      .where('art.id', id)
+      .where('thg.id', id)
       .first()
   },
 
   getReviewsForThing(db, thing_id) {
     return db
-      .from('thingful_reviews AS comm')
+      .from('thingful_reviews AS rev')
       .select(
-        'comm.id',
-        'comm.rating',
-        'comm.text',
-        'comm.date_created',
+        'rev.id',
+        'rev.rating',
+        'rev.text',
+        'rev.date_created',
         db.raw(
           `row_to_json(
             (SELECT tmp FROM (
@@ -70,13 +70,13 @@ const ThingsService = {
           ) AS "user"`
         )
       )
-      .where('comm.thing_id', thing_id)
+      .where('rev.thing_id', thing_id)
       .leftJoin(
         'thingful_users AS usr',
-        'comm.user_id',
+        'rev.user_id',
         'usr.id',
       )
-      .groupBy('comm.id', 'usr.id')
+      .groupBy('rev.id', 'usr.id')
   },
 
   serializeThing(thing) {
