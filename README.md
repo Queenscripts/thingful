@@ -4,7 +4,7 @@
 
 - Install dependencies: `npm install`
 - Create development database, test database, and database user.
-- `cp example.env .env`
+- Prepare environment file: `cp example.env .env`
 - Replace values in `.env` with your custom values.
 - Bootstrap database: `npm run migrate`
 

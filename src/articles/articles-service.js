@@ -9,6 +9,7 @@ const ArticlesService = {
         'art.title',
         'art.date_created',
         'art.content',
+        'art.image',
         db.raw(
           `count(DISTINCT comm) AS number_of_comments`
         ),
@@ -80,6 +81,7 @@ const ArticlesService = {
       title: xss(article.title),
       content: xss(article.content),
       date_created: article.date_created,
+      image: article.image,
       author: article.author || {},
       number_of_comments: Number(article.number_of_comments) || 0,
     }
