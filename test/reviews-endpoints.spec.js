@@ -2,13 +2,13 @@ const knex = require('knex')
 const app = require('../src/app')
 const helpers = require('./test-helpers')
 
-describe('Comments Endpoints', function() {
+describe('Reviews Endpoints', function() {
   let db
 
   const {
-    testArticles,
+    testThings,
     testUsers,
-  } = helpers.makeArticlesFixtures()
+  } = helpers.makeThingsFixtures()
 
   before('make knex instance', () => {
     db = knex({
@@ -24,48 +24,51 @@ describe('Comments Endpoints', function() {
 
   afterEach('cleanup', () => helpers.cleanTables(db))
 
-  describe(`POST /api/comments`, () => {
-    beforeEach('insert articles', () =>
-      helpers.seedArticlesTables(
+  describe(`POST /api/reviews`, () => {
+    beforeEach('insert things', () =>
+      helpers.seedThingsTables(
         db,
         testUsers,
-        testArticles,
+        testThings,
       )
     )
 
-    it(`creates an comment, responding with 201 and the new comment`, function() {
+    it(`creates an review, responding with 201 and the new review`, function() {
       this.retries(3)
-      const testArticle = testArticles[0]
+      const testThing = testThings[0]
       const testUser = testUsers[0]
-      const newComment = {
-        text: 'Test new comment',
-        article_id: testArticle.id,
+      const newReview = {
+        text: 'Test new review',
+        rating: 3,
+        thing_id: testThing.id,
         user_id: testUser.id,
       }
       return supertest(app)
-        .post('/api/comments')
-        .send(newComment)
+        .post('/api/reviews')
+        .send(newReview)
         .expect(201)
         .expect(res => {
           expect(res.body).to.have.property('id')
-          expect(res.body.text).to.eql(newComment.text)
-          expect(res.body.article_id).to.eql(newComment.article_id)
+          expect(res.body.rating).to.eql(newReview.rating)
+          expect(res.body.text).to.eql(newReview.text)
+          expect(res.body.thing_id).to.eql(newReview.thing_id)
           expect(res.body.user.id).to.eql(testUser.id)
-          expect(res.headers.location).to.eql(`/api/comments/${res.body.id}`)
+          expect(res.headers.location).to.eql(`/api/reviews/${res.body.id}`)
           const expectedDate = new Date().toLocaleString()
           const actualDate = new Date(res.body.date_created).toLocaleString()
           expect(actualDate).to.eql(expectedDate)
         })
         .expect(res =>
           db
-            .from('blogful_comments')
+            .from('blogful_reviews')
             .select('*')
             .where({ id: res.body.id })
             .first()
             .then(row => {
-              expect(row.text).to.eql(newComment.text)
-              expect(row.article_id).to.eql(newComment.article_id)
-              expect(row.user_id).to.eql(newComment.user_id)
+              expect(row.text).to.eql(newReview.text)
+              expect(row.rating).to.eql(newReview.rating)
+              expect(row.thing_id).to.eql(newReview.thing_id)
+              expect(row.user_id).to.eql(newReview.user_id)
               const expectedDate = new Date().toLocaleString()
               const actualDate = new Date(row.date_created).toLocaleString()
               expect(actualDate).to.eql(expectedDate)
@@ -73,23 +76,24 @@ describe('Comments Endpoints', function() {
         )
     })
 
-    const requiredFields = ['text', 'user_id', 'article_id']
+    const requiredFields = ['text', 'rating', 'user_id', 'thing_id']
 
     requiredFields.forEach(field => {
-      const testArticle = testArticles[0]
+      const testThing = testThings[0]
       const testUser = testUsers[0]
-      const newComment = {
-        text: 'Test new comment',
+      const newReview = {
+        text: 'Test new review',
+        rating: 3,
         user_id: testUser.id,
-        article_id: testArticle.id,
+        thing_id: testThing.id,
       }
 
       it(`responds with 400 and an error message when the '${field}' is missing`, () => {
-        delete newComment[field]
+        delete newReview[field]
 
         return supertest(app)
-          .post('/api/comments')
-          .send(newComment)
+          .post('/api/reviews')
+          .send(newReview)
           .expect(400, {
             error: `Missing '${field}' in request body`,
           })

@@ -1,7 +1,7 @@
 const xss = require('xss')
 
-const ArticlesService = {
-  getAllArticles(db) {
+const ThingsService = {
+  getAllThings(db) {
     return db
       .from('thingful_things AS art')
       .select(
@@ -11,7 +11,7 @@ const ArticlesService = {
         'art.content',
         'art.image',
         db.raw(
-          `count(DISTINCT comm) AS number_of_comments`
+          `count(DISTINCT comm) AS number_of_reviews`
         ),
         db.raw(
           `json_strip_nulls(
@@ -23,7 +23,7 @@ const ArticlesService = {
               'date_created', usr.date_created,
               'date_modified', usr.date_modified
             )
-          ) AS "author"`
+          ) AS "user"`
         ),
       )
       .leftJoin(
@@ -40,16 +40,17 @@ const ArticlesService = {
   },
 
   getById(db, id) {
-    return ArticlesService.getAllArticles(db)
+    return ThingsService.getAllThings(db)
       .where('art.id', id)
       .first()
   },
 
-  getCommentsForArticle(db, article_id) {
+  getReviewsForThing(db, thing_id) {
     return db
       .from('thingful_reviews AS comm')
       .select(
         'comm.id',
+        'comm.rating',
         'comm.text',
         'comm.date_created',
         db.raw(
@@ -66,7 +67,7 @@ const ArticlesService = {
           ) AS "user"`
         )
       )
-      .where('comm.thing_id', article_id)
+      .where('comm.thing_id', thing_id)
       .leftJoin(
         'thingful_users AS usr',
         'comm.user_id',
@@ -75,27 +76,28 @@ const ArticlesService = {
       .groupBy('comm.id', 'usr.id')
   },
 
-  serializeArticle(article) {
+  serializeThing(thing) {
     return {
-      id: article.id,
-      title: xss(article.title),
-      content: xss(article.content),
-      date_created: article.date_created,
-      image: article.image,
-      author: article.author || {},
-      number_of_comments: Number(article.number_of_comments) || 0,
+      id: thing.id,
+      title: xss(thing.title),
+      content: xss(thing.content),
+      date_created: thing.date_created,
+      image: thing.image,
+      user: thing.user || {},
+      number_of_reviews: Number(thing.number_of_reviews) || 0,
     }
   },
 
-  serializeArticleComment(comment) {
+  serializeThingReview(review) {
     return {
-      id: comment.id,
-      article_id: comment.article_id,
-      text: xss(comment.text),
-      user: comment.user || {},
-      date_created: comment.date_created,
+      id: review.id,
+      rating: review.rating,
+      thing_id: review.thing_id,
+      text: xss(review.text),
+      user: review.user || {},
+      date_created: review.date_created,
     }
   },
 }
 
-module.exports = ArticlesService
+module.exports = ThingsService
