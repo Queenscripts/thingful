@@ -3,12 +3,11 @@ const xss = require('xss')
 const ArticlesService = {
   getAllArticles(db) {
     return db
-      .from('blogful_articles AS art')
+      .from('thingful_things AS art')
       .select(
         'art.id',
         'art.title',
         'art.date_created',
-        'art.style',
         'art.content',
         db.raw(
           `count(DISTINCT comm) AS number_of_comments`
@@ -27,13 +26,13 @@ const ArticlesService = {
         ),
       )
       .leftJoin(
-        'blogful_comments AS comm',
+        'thingful_reviews AS comm',
         'art.id',
-        'comm.article_id',
+        'comm.thing_id',
       )
       .leftJoin(
-        'blogful_users AS usr',
-        'art.author_id',
+        'thingful_users AS usr',
+        'art.user_id',
         'usr.id',
       )
       .groupBy('art.id', 'usr.id')
@@ -47,7 +46,7 @@ const ArticlesService = {
 
   getCommentsForArticle(db, article_id) {
     return db
-      .from('blogful_comments AS comm')
+      .from('thingful_reviews AS comm')
       .select(
         'comm.id',
         'comm.text',
@@ -66,9 +65,9 @@ const ArticlesService = {
           ) AS "user"`
         )
       )
-      .where('comm.article_id', article_id)
+      .where('comm.thing_id', article_id)
       .leftJoin(
-        'blogful_users AS usr',
+        'thingful_users AS usr',
         'comm.user_id',
         'usr.id',
       )
@@ -78,7 +77,6 @@ const ArticlesService = {
   serializeArticle(article) {
     return {
       id: article.id,
-      style: article.style,
       title: xss(article.title),
       content: xss(article.content),
       date_created: article.date_created,

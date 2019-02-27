@@ -10,8 +10,8 @@
 
 ## Sample Data
 
-- To seed the database for development: `psql -U my_user -d my_database -a -f seeds/seed.blogful_tables.sql`
-- To clear sample data: `psql -U my_user -d my_database -a -f seeds/trunc.blogful_tables.sql`
+- To seed the database for development: `psql -U my_user -d my_database -a -f seeds/seed.thingful_tables.sql`
+- To clear sample data: `psql -U my_user -d my_database -a -f seeds/trunc.thingful_tables.sql`
 
 ## Scripts
 
