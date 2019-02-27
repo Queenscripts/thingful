@@ -14,6 +14,9 @@ const ThingsService = {
           `count(DISTINCT comm) AS number_of_reviews`
         ),
         db.raw(
+          `AVG(comm.rating) AS average_review_rating`
+        ),
+        db.raw(
           `json_strip_nulls(
             json_build_object(
               'id', usr.id,
@@ -85,6 +88,7 @@ const ThingsService = {
       image: thing.image,
       user: thing.user || {},
       number_of_reviews: Number(thing.number_of_reviews) || 0,
+      average_review_rating: Math.round(thing.average_review_rating),
     }
   },
 

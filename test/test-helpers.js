@@ -137,9 +137,11 @@ function makeExpectedThing(users, thing, reviews=[]) {
   const user = users
     .find(user => user.id === thing.user_id)
 
-  const number_of_reviews = reviews
+  const thingReviews = reviews
     .filter(review => review.thing_id === thing.id)
-    .length
+
+  const number_of_reviews = thingReviews.length
+  const average_review_rating = calculateAverageReviewRating(thingReviews)
 
   return {
     id: thing.id,
@@ -148,6 +150,7 @@ function makeExpectedThing(users, thing, reviews=[]) {
     content: thing.content,
     date_created: thing.date_created,
     number_of_reviews,
+    average_review_rating,
     user: {
       id: user.id,
       user_name: user.user_name,
@@ -156,6 +159,16 @@ function makeExpectedThing(users, thing, reviews=[]) {
       date_created: user.date_created,
     },
   }
+}
+
+function calculateAverageReviewRating(reviews) {
+  if(!reviews.length) return 0
+
+  const sum = reviews
+    .map(review => review.rating)
+    .reduce((a, b) => a + b)
+
+  return Math.round(sum / reviews.length)
 }
 
 function makeExpectedThingReviews(users, thingId, reviews) {
