@@ -8,7 +8,7 @@ thingsRouter
   .get((req, res, next) => {
     ThingsService.getAllThings(req.app.get('db'))
       .then(things => {
-        res.json(things.map(ThingsService.serializeThing))
+        res.json(ThingsService.serializeThings(things))
       })
       .catch(next)
   })
@@ -28,7 +28,7 @@ thingsRouter.route('/:thing_id/reviews/')
       req.params.thing_id
     )
       .then(reviews => {
-        res.json(reviews.map(ThingsService.serializeThingReview))
+        res.json(ThingsService.serializeThingReviews(reviews))
       })
       .catch(next)
   })
