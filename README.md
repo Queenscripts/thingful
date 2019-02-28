@@ -21,4 +21,4 @@
 ## Scripts
 
 - Start application for development: `npm run dev`
-- Run tests in watch mode: `npm test`
+- Run tests: `npm test`
