@@ -60,7 +60,7 @@ describe('Reviews Endpoints', function() {
         })
         .expect(res =>
           db
-            .from('blogful_reviews')
+            .from('thingful_reviews')
             .select('*')
             .where({ id: res.body.id })
             .first()
