@@ -6,8 +6,8 @@
 - Create development database, test database, and database user.
 - Prepare environment file: `cp example.env .env`
 - Replace values in `.env` with your custom values.
-- Bootstrap development database: `MIGRATION_DB_NAME=my_dev_db npm run migrate`
-- Bootstrap test database: `MIGRATION_DB_NAME=my_test_db npm run migrate`
+- Bootstrap development database: `npm run migrate`
+- Bootstrap test database: `npm run migrate:test`
 
 ## Sample Data
 
@@ -17,4 +17,4 @@
 ## Scripts
 
 - Start application for development: `npm run dev`
-- Run tests in watch mode: `npm test`
+- Run tests: `npm test`
