@@ -6,7 +6,7 @@ function makeUsersArray() {
       full_name: 'Test user 1',
       nickname: 'TU1',
       password: 'password',
-      date_created: '2029-01-22T16:28:32.615',
+      date_created: '2029-01-22T16:28:32.615Z',
     },
     {
       id: 2,
@@ -14,7 +14,7 @@ function makeUsersArray() {
       full_name: 'Test user 2',
       nickname: 'TU2',
       password: 'password',
-      date_created: '2029-01-22T16:28:32.615',
+      date_created: '2029-01-22T16:28:32.615Z',
     },
     {
       id: 3,
@@ -22,7 +22,7 @@ function makeUsersArray() {
       full_name: 'Test user 3',
       nickname: 'TU3',
       password: 'password',
-      date_created: '2029-01-22T16:28:32.615',
+      date_created: '2029-01-22T16:28:32.615Z',
     },
     {
       id: 4,
@@ -30,7 +30,7 @@ function makeUsersArray() {
       full_name: 'Test user 4',
       nickname: 'TU4',
       password: 'password',
-      date_created: '2029-01-22T16:28:32.615',
+      date_created: '2029-01-22T16:28:32.615Z',
     },
   ]
 }
@@ -188,7 +188,6 @@ function makeExpectedThingReviews(users, thingId, reviews) {
         full_name: reviewUser.full_name,
         nickname: reviewUser.nickname,
         date_created: reviewUser.date_created,
-        date_modified: null,
       }
     }
   })
